@@ -1,0 +1,54 @@
+<p>buecherverwaltung works!</p>
+<router-outlet></router-outlet>
+
+
+<h1>Bibliothek</h1>
+
+<form (ngSubmit)="addBook()" #bookForm="ngForm">
+  <label>
+    Titel:
+    <input type="text" [(ngModel)]="newBook.titel" name="titel" required />
+  </label>
+  <label>
+    Autor:
+    <input type="text" [(ngModel)]="newBook.autor" name="autor" required />
+  </label>
+  <label>
+    Jahr:
+    <input type="number" [(ngModel)]="newBook.erscheinungsjahr" name="erscheinungsjahr" required />
+  </label>
+  <label>
+    Verfügbar:
+    <select [(ngModel)]="newBook.verfuegbar" name="verfuegbar">
+      <option value="J">Ja</option>
+      <option value="N">Nein</option>
+    </select>
+  </label>
+  <button type="submit">Buch hinzufügen</button>
+</form>
+
+<hr />
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Titel</th>
+      <th>Autor</th>
+      <th>Jahr</th>
+      <th>Verfügbar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let book of books">
+      <td>{{ book.id }}</td>
+      <td>{{ book.titel }}</td>
+      <td>{{ book.autor }}</td>
+      <td>{{ book.erscheinungsjahr }}</td>
+      <td>{{ book.verfuegbar }}</td>
+      <td>
+<button (click)="deleteBook(book.id!)">Löschen</button>
+    </td>
+    </tr>
+  </tbody>
+</table>
