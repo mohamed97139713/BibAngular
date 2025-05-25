@@ -1,35 +1,78 @@
-<p>buecherverwaltung works!</p>
-<router-outlet></router-outlet>
+
+<!-- Bücher Form um neues Buch anzulegen  -->
+<div class="container mt-4">
+  <h1 class="mb-4">📚 Bibliothek</h1>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      Neues Buch hinzufügen
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="addBook()" #bookForm="ngForm" class="row g-3">
+        <div class="col-md-6">
+          <label for="titel" class="form-label">Titel:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="titel"
+            name="titel"
+            required
+            [(ngModel)]="newBook.titel"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <label for="autor" class="form-label">Autor:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="autor"
+            name="autor"
+            required
+            [(ngModel)]="newBook.autor"
+          />
+        </div>
+
+        <div class="col-md-4">
+          <label for="erscheinungsjahr" class="form-label">Jahr:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="erscheinungsjahr"
+            name="erscheinungsjahr"
+            required
+            [(ngModel)]="newBook.erscheinungsjahr"
+          />
+        </div>
+
+        <div class="col-md-4">
+          <label for="verfuegbar" class="form-label">Verfügbar:</label>
+          <select
+            class="form-select"
+            id="verfuegbar"
+            name="verfuegbar"
+            [(ngModel)]="newBook.verfuegbar"
+          >
+              <option [ngValue]="true">Ja</option>
+  <option [ngValue]="false">Nein</option>
+          </select>
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Buch hinzufügen
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 
-<h1>Bibliothek</h1>
 
-<form (ngSubmit)="addBook()" #bookForm="ngForm">
-  <label>
-    Titel:
-    <input type="text" [(ngModel)]="newBook.titel" name="titel" required />
-  </label>
-  <label>
-    Autor:
-    <input type="text" [(ngModel)]="newBook.autor" name="autor" required />
-  </label>
-  <label>
-    Jahr:
-    <input type="number" [(ngModel)]="newBook.erscheinungsjahr" name="erscheinungsjahr" required />
-  </label>
-  <label>
-    Verfügbar:
-    <select [(ngModel)]="newBook.verfuegbar" name="verfuegbar">
-      <option value="J">Ja</option>
-      <option value="N">Nein</option>
-    </select>
-  </label>
-  <button type="submit">Buch hinzufügen</button>
-</form>
-
-<hr />
-
+<!-- Bücher Liste  -->
 <div class="table-responsive mt-4">
+  <h2 class="mb-3">Vorhandene Bücher</h2>
   <table class="table table-bordered table-striped align-middle shadow-sm">
     <thead class="table-dark">
       <tr>

@@ -3,5 +3,5 @@ export interface Book {
   titel: string;
   autor: string;
   erscheinungsjahr: number;
-  verfuegbar: string; // 'J' or 'N'
+  verfuegbar: string;
 }
