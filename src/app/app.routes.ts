@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { AppComponent } from './app.component';
 import { BuecherverwaltungComponent } from './buecherverwaltung/buecherverwaltung.component';
 import { HomeComponent } from './home/home.component';
 

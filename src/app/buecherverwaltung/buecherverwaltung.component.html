@@ -29,26 +29,36 @@
 
 <hr />
 
-<table border="1">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Titel</th>
-      <th>Autor</th>
-      <th>Jahr</th>
-      <th>Verfügbar</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let book of books">
-      <td>{{ book.id }}</td>
-      <td>{{ book.titel }}</td>
-      <td>{{ book.autor }}</td>
-      <td>{{ book.erscheinungsjahr }}</td>
-      <td>{{ book.verfuegbar }}</td>
-      <td>
-<button (click)="deleteBook(book.id!)">Löschen</button>
-    </td>
-    </tr>
-  </tbody>
-</table>
+<div class="table-responsive mt-4">
+  <table class="table table-bordered table-striped align-middle shadow-sm">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Titel</th>
+        <th scope="col">Autor</th>
+        <th scope="col">Jahr</th>
+        <th scope="col">Verfügbar</th>
+        <th scope="col">Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of books">
+        <td>{{ book.id }}</td>
+        <td>{{ book.titel }}</td>
+        <td>{{ book.autor }}</td>
+        <td>{{ book.erscheinungsjahr }}</td>
+        <td>
+          <span class="badge" [ngClass]="book.verfuegbar ? 'bg-success' : 'bg-danger'">
+            {{ book.verfuegbar ? 'Ja' : 'Nein' }}
+          </span>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-danger" (click)="deleteBook(book.id!)">
+            <i class="bi bi-trash"></i> Löschen
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
