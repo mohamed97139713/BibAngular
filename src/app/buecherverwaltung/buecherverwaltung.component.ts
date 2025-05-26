@@ -12,25 +12,24 @@ import { CommonModule } from '@angular/common';
   imports: [
     FormsModule,
     CommonModule,
-    RouterModule,
-    RouterOutlet
+    RouterModule
   ],
   templateUrl: './buecherverwaltung.component.html',
   styleUrl: './buecherverwaltung.component.css'
 })
 export class BuecherverwaltungComponent {
-books: Book[] = [];
+  books: Book[] = [];
 
-    newBook: Book = {
+  newBook: Book = {
     titel: '',
     autor: '',
     erscheinungsjahr: new Date().getFullYear(),
-    verfuegbar: 'J'
+    verfuegbar: ''
   };
 
-  constructor(private bookService: BookService,private http: HttpClient) {}
+  constructor(private bookService: BookService, private http: HttpClient) { }
 
-    ngOnInit(): void {
+  ngOnInit(): void {
     this.loadBooks();
   }
 
@@ -40,20 +39,19 @@ books: Book[] = [];
     });
   }
 
-    addBook(): void {
+  addBook(): void {
     this.bookService.addBook(this.newBook).subscribe(() => {
       this.newBook = {
         titel: '',
         autor: '',
         erscheinungsjahr: new Date().getFullYear(),
-        verfuegbar: 'J'
+        verfuegbar: ''
       };
       this.loadBooks();
     });
   }
 
-    deleteBook(id: number) {
-
+  deleteBook(id: number) {
     if (confirm('Möchten Sie dieses Buch wirklich löschen?')) {
       this.http.delete(`http://localhost:8080/api/books/${id}`).subscribe(() => {
         // Buch aus der Liste entfernen, ohne nochmal neu zu laden
