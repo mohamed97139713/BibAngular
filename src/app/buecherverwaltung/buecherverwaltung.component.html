@@ -50,30 +50,62 @@
   <table class="table table-bordered table-striped align-middle shadow-sm">
     <thead class="table-dark">
       <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Titel</th>
-        <th scope="col">Autor</th>
-        <th scope="col">Jahr</th>
-        <th scope="col">Verfügbar</th>
-        <th scope="col">Aktionen</th>
+        <th>ID</th>
+        <th>Titel</th>
+        <th>Autor</th>
+        <th>Jahr</th>
+        <th>Verfügbar</th>
+        <th>Aktionen</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let book of books">
-        <td>{{ book.id }}</td>
-        <td>{{ book.titel }}</td>
-        <td>{{ book.autor }}</td>
-        <td>{{ book.erscheinungsjahr }}</td>
-        <td>
-          <span class="badge" [ngClass]="book.verfuegbar === 'J' ? 'bg-success' : 'bg-danger'">
-            {{ book.verfuegbar === 'J' ? 'JA' : 'NEIN' }}
-          </span>
-        </td>
-        <td>
-          <button class="btn btn-sm btn-danger" (click)="deleteBook(book.id!)">
-            <i class="bi bi-trash"></i> Löschen
-          </button>
-        </td>
+        <ng-container *ngIf="editBookId !== book.id; else editRow">
+          <td>{{ book.id }}</td>
+          <td>{{ book.titel }}</td>
+          <td>{{ book.autor }}</td>
+          <td>{{ book.erscheinungsjahr }}</td>
+          <td>
+            <span class="badge" [ngClass]="book.verfuegbar === 'J' ? 'bg-success' : 'bg-danger'">
+              {{ book.verfuegbar === 'J' ? 'JA' : 'NEIN' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-primary me-2" (click)="startEdit(book)">
+              <i class="bi bi-pencil"></i> Bearbeiten
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteBook(book.id!)">
+              <i class="bi bi-trash"></i> Löschen
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-template #editRow>
+          <td>{{ editBook.id }}</td>
+          <td>
+            <input [(ngModel)]="editBook.titel" class="form-control" />
+          </td>
+          <td>
+            <input [(ngModel)]="editBook.autor" class="form-control" />
+          </td>
+          <td>
+            <input type="number" [(ngModel)]="editBook.erscheinungsjahr" class="form-control" />
+          </td>
+          <td>
+            <select [(ngModel)]="editBook.verfuegbar" class="form-select">
+              <option value="J">Ja</option>
+              <option value="N">Nein</option>
+            </select>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-success me-2" (click)="saveEdit()">
+              <i class="bi bi-check"></i> Speichern
+            </button>
+            <button class="btn btn-sm btn-secondary" (click)="cancelEdit()">
+              <i class="bi bi-x"></i> Abbrechen
+            </button>
+          </td>
+        </ng-template>
       </tr>
     </tbody>
   </table>

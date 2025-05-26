@@ -19,4 +19,7 @@ export class BookService {
     return this.http.post<void>(this.apiUrl, book);
   }
 
+  updateBook(book: Book) {
+    return this.http.put(`http://localhost:8080/api/books/${book.id}`, book);
+  }
 }

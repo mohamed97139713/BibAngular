@@ -27,6 +27,9 @@ export class BuecherverwaltungComponent {
     verfuegbar: ''
   };
 
+  editBookId: number | null = null;
+  editBook: Book = {} as Book;
+
   constructor(private bookService: BookService, private http: HttpClient) { }
 
   ngOnInit(): void {
@@ -60,5 +63,25 @@ export class BuecherverwaltungComponent {
         alert('Fehler beim Löschen des Buchs.');
       });
     }
+  }
+
+
+    startEdit(book: Book) {
+    this.editBookId = book.id!;
+    this.editBook = { ...book }; // Kopie machen, damit nicht direkt die Liste geändert wird
+  }
+
+  saveEdit() {
+    this.bookService.updateBook(this.editBook).subscribe(() => {
+      const index = this.books.findIndex(b => b.id === this.editBook.id);
+      if (index !== -1) {
+        this.books[index] = { ...this.editBook };
+      }
+      this.editBookId = null;
+    });
+  }
+
+  cancelEdit() {
+    this.editBookId = null;
   }
 }
