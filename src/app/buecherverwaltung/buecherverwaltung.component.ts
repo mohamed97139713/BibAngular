@@ -66,19 +66,21 @@ export class BuecherverwaltungComponent {
   }
 
 
-    startEdit(book: Book) {
+  startEdit(book: Book) {
     this.editBookId = book.id!;
     this.editBook = { ...book }; // Kopie machen, damit nicht direkt die Liste geändert wird
   }
 
   saveEdit() {
-    this.bookService.updateBook(this.editBook).subscribe(() => {
-      const index = this.books.findIndex(b => b.id === this.editBook.id);
-      if (index !== -1) {
-        this.books[index] = { ...this.editBook };
-      }
-      this.editBookId = null;
-    });
+    if (confirm('Möchten Sie die Änderungen wirklich speichern?')) {
+      this.bookService.updateBook(this.editBook).subscribe(() => {
+        const index = this.books.findIndex(b => b.id === this.editBook.id);
+        if (index !== -1) {
+          this.books[index] = { ...this.editBook };
+        }
+        this.editBookId = null;
+      });
+    }
   }
 
   cancelEdit() {
