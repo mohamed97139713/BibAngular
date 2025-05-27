@@ -20,6 +20,15 @@ import { CommonModule } from '@angular/common';
 export class BuecherverwaltungComponent {
   books: Book[] = [];
 
+  displayedBooks: Book[] = [];
+
+  totalBooks: number = 0;
+
+  currentPage = 1;
+  pageSize = 10;
+  totalPages = 1;
+  totalPagesArray: number[] = [];
+
   newBook: Book = {
     titel: '',
     autor: '',
@@ -33,13 +42,22 @@ export class BuecherverwaltungComponent {
   constructor(private bookService: BookService, private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.loadBooks();
+    this.loadPage(this.currentPage);
   }
 
-  loadBooks() {
-    this.bookService.getBooks().subscribe(data => {
-      this.books = data;
+  loadPage(page: number) {
+    this.bookService.getBooksPaginated(page, this.pageSize).subscribe(data => {
+      this.displayedBooks = data.content;
+      this.currentPage = data.page;
+      this.totalPages = data.totalPages;
+      this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
     });
+  }
+
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.loadPage(page);
   }
 
   addBook(): void {
@@ -50,21 +68,23 @@ export class BuecherverwaltungComponent {
         erscheinungsjahr: new Date().getFullYear(),
         verfuegbar: ''
       };
-      this.loadBooks();
+      this.loadPage(this.currentPage);
     });
   }
 
   deleteBook(id: number) {
     if (confirm('Möchten Sie dieses Buch wirklich löschen?')) {
       this.http.delete(`http://localhost:8080/api/books/${id}`).subscribe(() => {
-        // Buch aus der Liste entfernen, ohne nochmal neu zu laden
-        this.books = this.books.filter(b => b.id !== id);
+        // Buch aus der aktuell angezeigten Seite entfernen
+        this.displayedBooks = this.displayedBooks.filter(b => b.id !== id);
+
+        // Optional: Seite neu laden, falls du die aktuelle Seitenzahl anpassen willst (z.B. wenn die Seite nach löschen leer wird)
+        this.loadPage(this.currentPage);
       }, error => {
         alert('Fehler beim Löschen des Buchs.');
       });
     }
   }
-
 
   startEdit(book: Book) {
     this.editBookId = book.id!;
@@ -74,9 +94,9 @@ export class BuecherverwaltungComponent {
   saveEdit() {
     if (confirm('Möchten Sie die Änderungen wirklich speichern?')) {
       this.bookService.updateBook(this.editBook).subscribe(() => {
-        const index = this.books.findIndex(b => b.id === this.editBook.id);
+        const index = this.displayedBooks.findIndex(b => b.id === this.editBook.id);
         if (index !== -1) {
-          this.books[index] = { ...this.editBook };
+          this.displayedBooks[index] = { ...this.editBook };
         }
         this.editBookId = null;
       });
